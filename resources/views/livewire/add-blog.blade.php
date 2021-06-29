@@ -1,7 +1,6 @@
 <div>
 
 <form>
-      <div class="modal-body">
         
   <div class="form-row">
     <div class="form-group col-md-12">
@@ -20,7 +19,7 @@
   <div class="form-group">
     <label for="inputAddress2">Description</label>
     <textarea type="text" class="form-control" id="inputAddress2" wire:model="desc" rows="4"></textarea>
-    @error('author') <span class="text-danger">{{ $message }}</span> @enderror
+    @error('desc') <span class="text-danger">{{ $message }}</span> @enderror
   </div>
 
   <div class="form-row">
@@ -32,10 +31,9 @@
 
   </div>
   
-      </div>
-      <div class="modal-footer">
-        <button wire:click="closeForm" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>        
-  <button wire:click.prevent="store()" type="submit" class="btn btn-primary">Add Blog</button>
+      <div class="form-group">
+        <button wire:click="closeForm" type="button" class="btn btn-secondary">Close</button>        
+  <button wire:click.prevent="store()" type="submit" class="btn btn-primary float-right">Add Blog</button>
       </div>
       
 </form>

@@ -4,18 +4,28 @@ namespace App\Http\Livewire;
 
 use App\Models\Blog;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Blogs extends Component
 {
+    use WithPagination; // main class required for pagination
+
     public $title, $short_info, $desc, $author;
     public $isBlogUpdate='list';
     public $blog, $blog_id;  // varaible must be public to get binding them into component
 
     public function render()
     {
-        $this->blog = Blog::orderby('created_at','desc')->get();
+        $this->blog = Blog::orderby('created_at','desc')->get(); 
         return view('livewire.blogs');
     }
+
+    //to listen the js function created in the component.
+    protected $listeners = [
+        'deleteBlog'=>'delete'
+        // deleteBlog is the function created in the component script &
+        // delete is the function for deleting data from database which is created in this livewire controller
+    ];
 
     // public function mount()
     // {        
@@ -63,6 +73,7 @@ class Blogs extends Component
     public function closeForm()
     {
         $this->resetFormback();
+        $this->hydrate();
     }
 
     public function store()
@@ -83,7 +94,9 @@ class Blogs extends Component
 
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
+        $this->hydrate();
         $this->isBlogUpdate='update';
         $data=Blog::where('id',$id)->first();
 
@@ -113,7 +126,6 @@ class Blogs extends Component
         session()->flash('message', 'Blog successfully updated.');
 
     }
-    
 
     public function delete($id){
         if($id){
@@ -121,4 +133,12 @@ class Blogs extends Component
             session()->flash('message', 'Blog successfully deleted.');
         }
     }
+
+    // function is for removie all the error message and validation
+    public function hydrate()
+    {
+        $this->resetErrorBag();
+        $this->resetValidation();
+    }
+
 }

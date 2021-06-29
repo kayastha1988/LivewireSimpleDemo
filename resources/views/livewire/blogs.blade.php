@@ -6,6 +6,8 @@
 <hr>
     <h3 class="mt-4">List of Blogs</h3>
     <button wire:click="create" class="btn btn-warning text-capitalize">add blog</button>
+
+    @include('livewire.add-blog-modal')
     <hr>
 
     @if(session()->has('message'))
@@ -34,6 +36,7 @@
     </tr>
   </thead>
   <tbody>
+
 @foreach($blog as $key => $blogs)
 <tr>
 <td>{{ ++$key }}</td>
@@ -44,14 +47,23 @@
 <td>
     <button wire:click="edit({{ $blogs->id }})" class="btn btn-primary text-uppercase">edit</button>
     <button wire:click="delete({{ $blogs->id }})" class="btn btn-danger text-uppercase">delete</button>
+    
+    <button onclick="deleteBlog({{ $blogs->id }})" class="btn btn-warning text-uppercase">delete (with dialog box)</button>
 </td>
 </tr>
 @endforeach
   
   </tbody>
 </table>
+
 @endif
 
 
+<script>
+        function deleteBlog(id){
+            if(confirm("Are you sure to delete this record?"))
+                window.livewire.emit('deleteBlog',id);
+        }
+    </script>
 
 </div>

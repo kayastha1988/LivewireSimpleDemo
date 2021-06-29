@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Livewire\User\Users;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,3 +25,5 @@ Route::get("/article/add", 'MainController@addArticle')->name('article.add');
 
 Route::get("/blogs", 'BlogController@index')->name('blog');
 
+//directly rendering the component via livewire controller
+// Route::get('/user', Users::class);
