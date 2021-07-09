@@ -25,5 +25,11 @@ Route::get("/article/add", 'MainController@addArticle')->name('article.add');
 
 Route::get("/blogs", 'BlogController@index')->name('blog');
 
+
+Route::get("/testimonials", 'TestimonialController@index')->name('testimonials');
+
 //directly rendering the component via livewire controller
 // Route::get('/user', Users::class);
+
+
+Route::get('/export/excel/users', 'MainController@exportExcel')->name('export.excel.users');
