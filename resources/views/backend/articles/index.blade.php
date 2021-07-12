@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 
 @section('contents')
 
@@ -11,9 +11,9 @@
         {{ session()->get('message') }}
     </div>
 @endif
-        
+
         <h3 class="text-capitalize">view articles</h3>
-    
+
 <a class="btn btn-primary" href="{{ route('article.add') }}">Add Article</a>
 
 <hr>

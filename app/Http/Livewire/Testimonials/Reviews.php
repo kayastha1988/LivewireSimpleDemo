@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Testimonials;
 
 use App\Models\Testimonial;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
 class Reviews extends Component
@@ -75,14 +76,19 @@ class Reviews extends Component
 
     public function update()
     {
-        $this->validate();
-        $data = [
-            'name' => $this->name,
-            'review' => $this->review,
-        ];
-        Testimonial::where('id', $this->reviewId)->update($data);
-        session()->flash('message', 'Review successfully updated.');
-        $this->closeForm();
+        if (Gate::allows('isManager') || Gate::allows('isUser')) {
+            $this->validate();
+            $data = [
+                'name' => $this->name,
+                'review' => $this->review,
+            ];
+            Testimonial::where('id', $this->reviewId)->update($data);
+            session()->flash('message', 'Review successfully updated.');
+            $this->closeForm();
+        } else {
+            session()->flash('message', 'You don\'t have access to update.');
+            $this->closeForm();
+        }
     }
 
     /* passing id data to the delete modal...*/
@@ -93,9 +99,18 @@ class Reviews extends Component
 
     public function destroy()
     {
-        if ($this->reviewId) {
-            Testimonial::where('id', $this->reviewId)->delete();
-            session()->flash('message', 'Review successfully deleted.');
+
+//        $this->authorize('isAdmin');        // this is for only in controller.
+
+        if (Gate::allows('isAdmin')) {
+
+            if ($this->reviewId) {
+                Testimonial::where('id', $this->reviewId)->delete();
+                session()->flash('message', 'Review successfully deleted.');
+                $this->closeForm();
+            }
+        } else {
+            session()->flash('message', 'You don\'t have access to deleted.');
             $this->closeForm();
         }
     }

@@ -1,4 +1,4 @@
-@extends('master')
+@extends('backend.master')
 
 @section('contents')
 
@@ -15,6 +15,7 @@
                     <tr>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Role</th>
                         <th>Date</th>
                     </tr>
                     </thead>
@@ -23,6 +24,7 @@
                         <tr>
                             <td>{{ $data->name }}</td>
                             <td>{{ $data->email }}</td>
+                            <td>{{ $data->role }}</td>
                             <td>{{ $data->created_at }}</td>
                         </tr>
                     @endforeach

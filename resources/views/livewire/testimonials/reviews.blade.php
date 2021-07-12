@@ -24,16 +24,23 @@
                 <td>{{ $valData->name }}</td>
                 <td>{{ $valData->review }}</td>
                 <td>
-                    <span wire:click="edit({{ $valData->id }})" data-toggle="tooltip" data-placement="top" title="Edit"
-                          style="cursor: pointer">
+                    {{--                    to work multiple user role--}}
+                    @canany(['isManager', 'isUser'])
+                        <span wire:click="edit({{ $valData->id }})" data-toggle="tooltip" data-placement="top"
+                              title="Edit"
+                              style="cursor: pointer">
                         <i data-toggle="modal" data-target="#modalUpdateReview"
                            class="fa fa-pencil-square fa-2x text-success"></i>
                     </span>
-                    <span wire:click="delete({{ $valData->id }})" data-toggle="modal" data-target="#modalDeleteReview"
-                          style="cursor: pointer">
+                    @endcanany
+                    @can('isAdmin')
+                        <span wire:click="delete({{ $valData->id }})" data-toggle="modal"
+                              data-target="#modalDeleteReview"
+                              style="cursor: pointer">
                         <i data-toggle="tooltip" data-placement="top" title="Delete"
                            class="fa fa-minus-square fa-2x text-danger"></i>
                     </span>
+                    @endcan
                 </td>
             </tr>
         @endforeach
@@ -130,7 +137,6 @@
             </div>
         </div>
     </div>
-
 
 </div>
 

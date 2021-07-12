@@ -2,7 +2,7 @@
 <livewire:article.create :$article='article' /> -->
 
 
-@extends('master')
+@extends('backend.master')
 
 @section('contents')
 

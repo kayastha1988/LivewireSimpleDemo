@@ -14,9 +14,10 @@ class Blogs extends Component
     public $isBlogUpdate='list';
     public $blog, $blog_id;  // varaible must be public to get binding them into component
 
+
     public function render()
     {
-        $this->blog = Blog::orderby('created_at','desc')->get(); 
+        $this->blog = Blog::orderby('created_at','desc')->get();
         return view('livewire.blogs');
     }
 
@@ -28,7 +29,7 @@ class Blogs extends Component
     ];
 
     // public function mount()
-    // {        
+    // {
     //     $blog = Blog::orderby('created_at','desc')->get();
     // }
 
@@ -42,7 +43,7 @@ class Blogs extends Component
     protected $messages = [
         'title.required' => 'The title cannot be empty.',
         'title.min' => 'Minimum 3 chars.',
-        
+
         'short_info.required' => 'The short info cannot be empty.',
         'short_info.min' => 'Minimum 3 chars.',
 
@@ -64,12 +65,12 @@ class Blogs extends Component
         $this->isBlogUpdate='list';
         $this->resetFormFields();
     }
-    
+
     public function create()
     {
         $this->isBlogUpdate='create';
     }
-    
+
     public function closeForm()
     {
         $this->resetFormback();
@@ -107,7 +108,7 @@ class Blogs extends Component
         $this->author=$data->author;
     }
 
-    
+
 
     public function update()
     {

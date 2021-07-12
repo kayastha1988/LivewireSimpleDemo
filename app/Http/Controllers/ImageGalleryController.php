@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TestimonialController extends Controller
+class ImageGalleryController extends Controller
 {
-    private $_pages = 'backend.testimonials.';
+    private $_pages = 'backend.gallery.';
 
     public function index()
     {

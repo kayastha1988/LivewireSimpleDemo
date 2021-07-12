@@ -16,20 +16,34 @@ use Illuminate\Support\Facades\Route;
 
 
 // Frontend
-Route::get("/", 'MainController@mainPage')->name('home');
-Route::get("/article", 'MainController@article')->name('article');
-Route::get("/article/add", 'MainController@addArticle')->name('article.add');
+Route::group(['middleware' => ['auth']], function () {
+//    Route::namespace("backend")->group(function () { //to define this, there must be a backend folder for controllers.
+    Route::group(['prefix' => 'backend'], function () {
+        Route::get("/dashboard", 'MainController@mainPage')->name('dashboard');
+        Route::get("/article", 'MainController@article')->name('article');
+        Route::get("/article/add", 'MainController@addArticle')->name('article.add');
 
 // Route::get("/article/edit/{id}", 'MainController@editArticle')->name('article.edit');
 
 
-Route::get("/blogs", 'BlogController@index')->name('blog');
+        Route::get("/blogs", 'BlogController@index')->name('blog');
 
-
-Route::get("/testimonials", 'TestimonialController@index')->name('testimonials');
+        Route::group(['prefix' => 'testimonials'], function () {
+            Route::get("/", 'TestimonialController@index')->name('testimonials')->middleware('can:isAdmin');
+        });
+        Route::group(['prefix' => 'gallery'], function () {
+            Route::get("/", 'ImageGalleryController@index')->name('gallery');
+        });
 
 //directly rendering the component via livewire controller
 // Route::get('/user', Users::class);
 
 
-Route::get('/export/excel/users', 'MainController@exportExcel')->name('export.excel.users');
+        Route::get('/export/excel/users', 'MainController@exportExcel')->name('export.excel.users');
+    });
+//    });
+});
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

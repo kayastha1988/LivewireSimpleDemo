@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MainController extends Controller
 {
-    private $_pages = 'articles.';
+    private $_pages = 'backend.articles.';
 
 
     public function mainPage()
@@ -51,7 +51,7 @@ class MainController extends Controller
 
         $dataUser = User::get();
 
-        return view('welcome', ['usersChart' => $usersChart, 'dataUser' => $dataUser]);
+        return view('backend.welcome', ['usersChart' => $usersChart, 'dataUser' => $dataUser]);
 //        return view('welcome');
     }
 
