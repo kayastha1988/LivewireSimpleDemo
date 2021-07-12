@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Gallery;
 
 use App\Models\ImageGallery;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
@@ -39,8 +40,7 @@ class Gallery extends Component
     public function closeForm()
     {
         $this->emit('galleryStore'); //TO CLOSE THE MODAL FORM. "reviewStore" =>its a event name defined in the jquery in livewire component
-//        $this->emit('reviewUpdate');
-//        $this->emit('reviewDelete');
+        $this->emit('galleryDelete');
         $this->resetFormback();
         $this->hydrate();
     }
@@ -59,9 +59,36 @@ class Gallery extends Component
         $this->closeForm();
     }
 
+    public function delete($id)
+    {
+        $this->galleryId = $id;
+    }
+
+    public function destroy()
+    {
+        if (Gate::allows('isAdmin')) {
+            $galleryImage = ImageGallery::where('id', $this->galleryId)->first();
+            if ($galleryImage) {
+                if (file_exists('storage/' . $galleryImage->image)) {
+                    unlink('storage/' . $galleryImage->image);
+                }
+                ImageGallery::where('id', $this->galleryId)->delete();
+
+                session()->flash('message', 'Image successfully deleted from gallery.');
+            } else {
+                session()->flash('message', 'Something went wrong. Please try again.');
+            }
+            $this->closeForm();
+        } else {
+            session()->flash('message', 'Sorry! you don\' have access to this action. Thanks');
+            $this->closeForm();
+        }
+
+    }
+
     public function render()
     {
-        $this->data= ImageGallery::get();
+        $this->data = ImageGallery::get();
         return view('livewire.gallery.gallery');
     }
 }

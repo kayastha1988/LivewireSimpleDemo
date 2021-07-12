@@ -14,7 +14,9 @@
             <th></th>
             <th>Title</th>
             <th>Image</th>
-            <th>Action</th>
+            @can('isAdmin')
+                <th>Action</th>
+            @endcan
         </tr>
         </thead>
         <tbody>
@@ -26,14 +28,21 @@
                     <img src="{{ asset('storage/'.$valData->image) }}" alt="{{ $valData->title }}" width="220"
                          height="120">
                 </td>
-                <td></td>
+                <td>
+                    @canany(['isAdmin','isUser'])
+                        <span wire:click="delete({{ $valData->id }})" data-toggle="modal"
+                              data-target="#modalDeleteGallery" style="cursor: pointer">
+                        <i data-toggle="tooltip" data-placement="top" title="Delete"
+                           class="fa fa-minus-square fa-2x text-danger"></i>
+                    </span>
+                    @endcan
+                </td>
             </tr>
         @endforeach
         </tbody>
     </table>
 
-
-    <!-- Add Review Modal -->
+    <!-- Add Gallery Modal -->
     <div class="modal fade" wire:ignore.self id="modalUploadGallery" tabindex="-1" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -66,8 +75,31 @@
         </div>
     </div>
 
-</div>
+    <!-- Delete Gallery Modal -->
+    <div class="modal fade" wire:ignore.self id="modalDeleteGallery" tabindex="-1" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="exampleModalLabel">Delete Reviews</h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form wire:submit.prevent="destroy" id="frmDelete">
+                    <div class="modal-body">
+                        <p>Are you sure to delete this record?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Yes, I confirm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+</div>
 
 
 @push('js_scripts')
@@ -76,39 +108,18 @@
         window.livewire.on('galleryStore', () => {
             $('#modalUploadGallery').modal('hide');
         });
-        // window.livewire.on('reviewUpdate', () => {
-        //     $('#modalUpdateReview').modal('hide');
-        //     $("#frmUpdate").trigger("reset");
-        // });
-        // window.livewire.on('reviewDelete', () => {
-        //     $('#modalDeleteReview').modal('hide');
-        //     $("#frmDelete").trigger("reset");
-        // });
+        window.livewire.on('galleryDelete', () => {
+            $('#modalDeleteGallery').modal('hide');
+            $("#frmDelete").trigger("reset");
+        });
 
         /* clearing all previous data from form... */
         $('#modalUploadGallery').on('hidden.bs.modal', function (e) {
             $('#frmStore')[0].reset();
         })
-        // $('#modalUpdateReview').on('hidden.bs.modal', function (e) {
-        //     $('#frmStore')[0].reset();
-        //     $('#frmUpdate')[0].reset();
-        //     $('#frmDelete')[0].reset();
-        // })
-        // $('#modalDeleteReview').on('hidden.bs.modal', function (e) {
-        //     $('#frmStore')[0].reset();
-        //     $('#frmUpdate')[0].reset();
-        //     $('#frmDelete')[0].reset();
-        // })
-
-        /*
-        function to delete data...
-        => this function need to be define as listener in livewire controller on which we need to declare with delete function from controller...
-        */
-        // function deleteReview(id) {
-        //     if (confirm("Are you sure to delete this record?"))
-        //         window.livewire.emit('deleteReview', id);
-        // }
-
-
+        $('#modalDeleteGallery').on('hidden.bs.modal', function (e) {
+            $('#frmStore')[0].reset();
+            $('#frmDelete')[0].reset();
+        })
     </script>
 @endpush
